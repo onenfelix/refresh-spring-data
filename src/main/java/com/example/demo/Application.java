@@ -23,6 +23,12 @@ public class Application {
                    "maria.jones@swinpostnetworks.ug",
                     21
             );
+            Student maria2 = new Student(
+                    "Maria",
+                    "Jones",
+                    "maria2.jones@swinpostnetworks.ug",
+                    25
+            );
             Student ahmed = new Student(
                     "Ahmed",
                     "Ali",
@@ -31,30 +37,27 @@ public class Application {
             );
 
             System.out.println("Adding Maria and Ahmed");
-            studentRepository.saveAll(List.of(maria,ahmed));
+            studentRepository.saveAll(List.of(maria,ahmed,maria2));
 
-            System.out.print("Number of students: ");
-            System.out.println(studentRepository.count());
-            studentRepository
-                    .findById(2L)
-                    .ifPresentOrElse(
-                            student -> System.out.println(student),
-                            () -> System.out.println("Student with ID 2 not found"));
-            studentRepository
-                    .findById(3L)
-                    .ifPresentOrElse(
-                            student -> System.out.println(student),
-                            () -> System.out.println("Student with ID 3 not found"));
+            studentRepository.findStudentByEmail("ahmed.ali@swinpostnetworks.ug")
+                    .ifPresentOrElse(System.out::println,
+                            () -> System.out.println("Student with email ahmed.ali@swinpostnetworks.ug not found"));
+            studentRepository.selectStudentsWhereFirstNameAndAgeGreaterOrEquals(
+                    "Maria",
+                    21
+            ).forEach(System.out::println);
+            studentRepository.selectStudentsWhereFirstNameAndAgeGreaterOrEqualsNative(
+                    "Maria",
+                    21
+            ).forEach(System.out::println);
 
-            System.out.println("select all students");
-            List<Student> students = studentRepository.findAll();
-            students.forEach(System.out::println);
+            studentRepository.selectStudentsWhereFirstNameAndAgeGreaterOrEqualsParametizedNative(
+                    "Maria",
+                    21
+            ).forEach(System.out::println);
 
-            System.out.println("delete maria");
-            studentRepository.deleteById(1L);
-
-            System.out.print("Number of students: ");
-            System.out.println(studentRepository.count());
+            System.out.println("Deleting Maria 2");
+            System.out.println(studentRepository.deleteStudentById(3L));
         };
     }
 
